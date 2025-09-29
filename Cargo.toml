@@ -1,0 +1,10 @@
+[package]
+name = "u2u"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+readme = "README.md"
+
+[dependencies]
+ulid = { version = "1.2.1", features = ["uuid"] }
+uuid = "1.18.1"
