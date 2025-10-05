@@ -1,14 +1,14 @@
 #[derive(Debug, Clone, PartialEq)]
 pub enum Kind {
     Ulid2Uuid,
-    // Uuid2Ulid, // for future UUID=>ULID conversions
+    Uuid2Ulid,
     Error,
 }
 impl std::fmt::Display for Kind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let repr = match self {
             Kind::Ulid2Uuid => "L2U",
-            // Kind::Uuid2Ulid => "U2L",
+            Kind::Uuid2Ulid => "U2L",
             _ => "ERR",
         };
         write!(f, "{repr}")
@@ -25,7 +25,7 @@ impl std::fmt::Display for Outcome {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "[{0}]:: {1:26} :: {2}",
+            "[{0}]:: {1:36} :: {2}",
             self.kind, self.value_in, self.value_out
         )
     }
@@ -55,6 +55,7 @@ mod test {
     #[test]
     fn test_kind() {
         assert_eq!(format!("{}", Kind::Ulid2Uuid), "L2U");
+        assert_eq!(format!("{}", Kind::Uuid2Ulid), "U2L");
         assert_eq!(format!("{}", Kind::Error), "ERR");
     }
 
@@ -64,7 +65,7 @@ mod test {
         outcome.set_value_out("any-good".to_string());
         assert_eq!(
             format!("{outcome}"),
-            "[ERR]:: any-how                    :: any-good",
+            "[ERR]:: any-how                              :: any-good",
         );
     }
 }

@@ -10,7 +10,16 @@ fn convert(values: Vec<String>) -> Vec<Outcome> {
             outcome.set_value_out(extracted.into());
             outcome.set_kind(Kind::Ulid2Uuid);
         } else {
-            outcome.set_value_out("can't parse the value".to_string());
+            match uuid::Uuid::parse_str(value) {
+                Ok(parsed) => {
+                    let extracted: ulid::Ulid = parsed.into();
+                    outcome.set_value_out(extracted.into());
+                    outcome.set_kind(Kind::Uuid2Ulid);
+                }
+                Err(_) => {
+                    outcome.set_value_out("can't parse the value".to_string());
+                }
+            }
         }
         collected.push(outcome)
     }
@@ -32,12 +41,22 @@ mod test {
     use crate::process::convert;
 
     #[test]
-    fn test_convert_ok() {
+    fn test_convert_ulid_ok() {
         let some_args = vec!["01K59FJBYATAY80B0ZKHEG28B7".to_string()];
         let outcome = convert(some_args).first().unwrap().to_owned();
         let expected = Outcome::new("01K59FJBYATAY80B0ZKHEG28B7".to_string())
             .set_value_out("019952f9-2fca-d2bc-802c-1f9c5d012167".to_string())
             .set_kind(Kind::Ulid2Uuid);
+        assert_eq!(outcome, expected);
+    }
+
+    #[test]
+    fn test_convert_uuid_ok() {
+        let some_args = vec!["019952f9-2fca-d2bc-802c-1f9c5d012167".to_string()];
+        let outcome = convert(some_args).first().unwrap().to_owned();
+        let expected = Outcome::new("019952f9-2fca-d2bc-802c-1f9c5d012167".to_string())
+            .set_value_out("01K59FJBYATAY80B0ZKHEG28B7".to_string())
+            .set_kind(Kind::Uuid2Ulid);
         assert_eq!(outcome, expected);
     }
 

@@ -1,14 +1,19 @@
-const USAGE: &str = "\x1b[1mu2u\x1b[22m [0.1.0]
+const USAGE: &str = "\x1b[1mu2u\x1b[22m [0.2.0]
 
 A tool for handling ulid/uuid conversions.
 
-\x1b[1mUSAGE\x1b[22m: u2u [OPTIONS] [ulids]...
+\x1b[1mUSAGE\x1b[22m: u2u [OPTIONS] [args]...
 
 \x1b[1mOPTIONS\x1b[22m:
   -h, --help        Print help
 
 \x1b[1mARGS\x1b[22m:
-  <ulids>...        ULIDs to convert";
+  <args>...        ULIDs and UUIDS to convert
+
+In output, status codes for conversions are:
+  - \x1b[1mU2L\x1b[22m = ULID to UUID
+  - \x1b[1mL2U\x1b[22m = UUID to ULID
+  - \x1b[1mERR\x1b[22m = ERROR";
 
 pub fn print_usage() {
     println!("{USAGE}");
